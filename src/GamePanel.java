@@ -28,14 +28,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     private int maxAsteroids = 4;
     private int speedMultiplier = 1;
 
-    // --- กำหนดขอบเขตของปุ่มต่างๆ (Rectangle) สำหรับให้เมาส์คลิก ---
     private Rectangle startButton = new Rectangle(300, 230, 200, 50);
     private Rectangle howToButton = new Rectangle(300, 300, 200, 50);
     private Rectangle backButton = new Rectangle(350, 460, 100, 40);
     private Rectangle restartButton = new Rectangle(300, 320, 200, 45);
     private Rectangle menuButton = new Rectangle(300, 380, 200, 45);
 
-    // ตัวแปรเก็บตำแหน่งเมาส์ปัจจุบัน เพื่อทำเอฟเฟกต์ Hover
     private int mouseX = 0;
     private int mouseY = 0;
 
@@ -49,7 +47,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
 
         initSpaceMap();
 
-        timer = new Timer(16, this); // ~60 FPS
+        timer = new Timer(16, this);
         timer.start();
     }
 
@@ -126,23 +124,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         }
     }
 
-    // --- 1. หน้าจอหลัก (Main Menu) พร้อมปุ่มกด ---
     private void drawMenu(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setColor(new Color(150, 220, 255));
         g2.setFont(new Font("Segoe UI", Font.BOLD, 52));
-        g2.drawString("SPACE SHOOTER", 210, 160);
+        g2.drawString("SPACE SURVIVOR", 210, 160);
 
-        // ปุ่ม Start Game
         drawButton(g2, startButton, "START GAME", new Color(46, 204, 113), new Color(39, 174, 96));
 
-        // ปุ่ม How to Play
         drawButton(g2, howToButton, "HOW TO PLAY", new Color(52, 152, 219), new Color(41, 128, 185));
     }
 
-    // --- 2. หน้าจอวิธีเล่น (How to Play) พร้อมปุ่ม Back ---
     private void drawHowToPlay(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -158,11 +152,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         g2.drawString("- Collect Red Crate: Heal +50 HP", 230, 330);
         g2.drawString("- Collect Orange Crate: Ammo +10", 230, 380);
 
-        // ปุ่ม Back
         drawButton(g2, backButton, "BACK", new Color(231, 76, 60), new Color(192, 57, 43));
     }
 
-    // --- 3. หน้าจอระหว่างเล่นเกม ---
     private void drawGamePlay(Graphics g) {
         for (Asteroid a : asteroids) {
             a.draw(g);
@@ -210,7 +202,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         g2.drawString("Ammo: " + player.ammo, 20, 102);
     }
 
-    // --- 4. หน้าจอ Game Over พร้อมปุ่มกดด้วยเมาส์ ---
     private void drawGameOver(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -226,17 +217,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         g2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         g2.drawString("Reached Level " + currentLevel + " (Distance: " + (int) distance + " m)", 245, 270);
 
-        // ปุ่มเล่นใหม่ / กลับเมนู
         drawButton(g2, restartButton, "PLAY AGAIN", new Color(46, 204, 113), new Color(39, 174, 96));
         drawButton(g2, menuButton, "MAIN MENU", new Color(241, 196, 15), new Color(212, 172, 13));
     }
 
-    // --- ฟังก์ชันช่วยวาดปุ่มพร้อมเอฟเฟกต์ Hover เมื่อเมาส์ชี้ ---
     private void drawButton(Graphics2D g2, Rectangle rect, String text, Color normalColor, Color hoverColor) {
         if (rect.contains(mouseX, mouseY)) {
-            g2.setColor(hoverColor); // สีตอนเอาเมาส์ชี้
+            g2.setColor(hoverColor);
         } else {
-            g2.setColor(normalColor); // สีปกติ
+            g2.setColor(normalColor);
         }
         g2.fillRoundRect(rect.x, rect.y, rect.width, rect.height, 10, 10);
 
@@ -361,7 +350,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
         }
     }
 
-    // --- จัดการเหตุการณ์คลิกเมาส์ (Mouse Click) ---
     @Override
     public void mouseClicked(MouseEvent e) {
         int mx = e.getX();
@@ -400,7 +388,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener, Mo
     @Override public void mouseExited(MouseEvent e) {}
     @Override public void mouseDragged(MouseEvent e) {}
 
-    // --- ควบคุมด้วยคีย์บอร์ด (ยังคงใช้ยิงและบังคับยานได้ปกติ) ---
     @Override
     public void keyPressed(KeyEvent e) {
         if (gameState != GameState.PLAYING || player.health <= 0) return;
